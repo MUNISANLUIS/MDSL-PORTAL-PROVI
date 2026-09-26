@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Municipalidad Distrital de San Luis — Servicios en Línea</title>
+  <style>
+    /* ============================================================
+       RESET Y VARIABLES GLOBALES
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Paleta institucional */
+      --primary: #0B4F6C;
+      --primary-dark: #093E54;
+      --primary-deep: #062C3B;
+      --primary-light: #E8F1F5;
+      --primary-border: #B8D0DB;
+      --primary-text: #0B4F6C;
+      --accent: #1B7A9E;
+      --accent-soft: #4A9FBF;
+      --footer-bg: #062C3B;
+      --gray-bg: #F4F6F8;
+      --gray-text: #5A6B7A;
+      --white: #FFFFFF;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 8px;
+      --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+      background: var(--gray-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1E2A32;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================================
+       HEADER INSTITUCIONAL
+       ============================================================ */
+    .header {
+      position: relative;
+      background: linear-gradient(160deg, #0A3D52 0%, #0B4F6C 45%, #093E54 100%);
+      padding: 64px 24px 96px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Patrón sutil de puntos */
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+      background-size: 22px 22px;
+      pointer-events: none;
+    }
+
+    /* Línea decorativa inferior */
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header-logo {
+      max-height: 72px;
+      max-width: 100%;
+      object-fit: contain;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: var(--white);
+      line-height: 1.25;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .header-divider {
+      width: 56px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.55);
+      margin: 18px auto 0;
+      border-radius: 2px;
+    }
+
+    .header-subtitle {
+      margin-top: 16px;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.88);
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       CONTENEDOR PRINCIPAL
+       ============================================================ */
+    .main {
+      flex: 1;
+      padding: 0 24px 48px;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: -56px auto 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ============================================================
+       TARJETA PRINCIPAL
+       ============================================================ */
+    .card-main {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 36px 36px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .card-main h2 {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--primary-deep);
+      letter-spacing: 0.2px;
+      margin-bottom: 6px;
+    }
+
+    .card-main .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: var(--gray-text);
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+
+    /* ============================================================
+       GRID DE SERVICIOS
+       ============================================================ */
+    .servicios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    /* ============================================================
+       TARJETA DE SERVICIO
+       ============================================================ */
+    .servicio {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      background: var(--white);
+      border: 1px solid #E2E8ED;
+      border-radius: var(--radius-md);
+      padding: 22px 22px 18px;
+      transition: var(--transition);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* Barra superior de color */
+    .servicio::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      opacity: 0.85;
+      transition: var(--transition);
+    }
+
+    .servicio:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(11, 79, 108, 0.14);
+      border-color: var(--accent-soft);
+    }
+
+    .servicio:hover::before {
+      opacity: 1;
+      height: 4px;
+    }
+
+    /* ===== Cabecera de la tarjeta ===== */
+    .servicio-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    /* Icono SVG contenedor */
+    .servicio-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition);
+      color: var(--primary);
+    }
+
+    .servicio:hover .servicio-icon {
+      background: #D6E8F0;
+      color: var(--primary-dark);
+    }
+
+    .servicio-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .servicio h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary-text);
+      line-height: 1.35;
+      letter-spacing: 0.1px;
+    }
+
+    /* ===== Descripción ===== */
+    .servicio p {
+      font-size: 13px;
+      color: var(--gray-text);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    /* ===== Enlace "Ingresar" ===== */
+    .servicio-link {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #EEF2F5;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+      transition: var(--transition);
+    }
+
+    .servicio-link svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: var(--transition);
+    }
+
+    .servicio:hover .servicio-link {
+      color: var(--primary-dark);
+    }
+
+    .servicio:hover .servicio-link svg {
+      transform: translateX(3px);
+    }
+
+    /* ============================================================
+       AVISO INSTITUCIONAL
+       ============================================================ */
+    .aviso {
+      margin-top: 24px;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--primary-deep);
+      line-height: 1.55;
+    }
+
+    .aviso-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      color: var(--primary);
+    }
+
+    .aviso-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .aviso strong {
+      font-weight: 600;
+      color: var(--primary-deep);
+    }
+
+    /* ============================================================
+       FOOTER INSTITUCIONAL
+       ============================================================ */
+    .footer {
+      position: relative;
+      background: var(--footer-bg);
+      color: rgba(255, 255, 255, 0.92);
+      padding: 52px 24px 24px;
+      overflow: hidden;
+      margin-top: auto;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 22px 22px;
+      pointer-events: none;
+    }
+
+    .footer-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-grid {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 32px;
+      text-align: center;
+    }
+
+    .footer-grid img {
+      max-height: 52px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+      opacity: 0.95;
+    }
+
+    .footer-title {
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--white);
+    }
+
+    .footer-sub {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 5px;
+      font-weight: 400;
+    }
+
+    .footer-line {
+      font-size: 12.5px;
+      line-height: 2.1;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .footer-line svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -2px;
+      margin-right: 5px;
+      opacity: 0.75;
+    }
+
+    .footer-copy {
+      max-width: 980px;
+      margin: 28px auto 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      padding-top: 18px;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.75;
+      letter-spacing: 0.2px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .header {
+        padding: 48px 20px 80px;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .card-main {
+        padding: 28px 20px 24px;
+      }
+
+      .servicios-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 22px;
+      }
+
+      .header-subtitle {
+        font-size: 13px;
+      }
+
+      .card-main h2 {
+        font-size: 18px;
+      }
+
+      .aviso {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
+
+      .main {
+        padding: 0 16px 36px;
+      }
+    }
+
+    /* ============================================================
+       ACCESIBILIDAD
+       ============================================================ */
+    .servicio:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="header">
+    <div class="header-content">
+      <img class="header-logo" src="assets/logo-default.png" alt="Escudo Municipalidad Distrital de San Luis" />
+      <h1>Municipalidad Distrital de San Luis</h1>
+      <div class="header-divider"></div>
+      <p class="header-subtitle">Comprometidos con tu desarrollo — Servicios en Línea</p>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN
+       ============================================================ -->
+  <main class="main">
+    <div class="container">
+      <div class="card-main">
+        <h2>¿Qué trámite deseas realizar hoy?</h2>
+        <p class="subtitle">Selecciona uno de nuestros servicios en línea</p>
+
+        <div class="servicios-grid">
+
+          <!-- ===== Mesa de Partes Virtual ===== -->
+          <a class="servicio" href="https://sgd.munisanluis.gob.pe/virtual/inicio.do" target="_blank" rel="noopener">
+            <div class="servicio-top">
+              <div class="servicio-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
+              <h3>Mesa de Partes Virtual</h3>
+            </div>
+            <p>Presenta tus documentos y solicitudes en línea las 24 horas del día.</p>
+            <div class="servicio-link">
+              Ingresar
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+            </div>
+          </a>
+
+          <!-- ===== Pagos en Línea ===== -->
+          <a class="servicio" href="https://pagosenlinea.munisanluis.gob.pe/pagoweb/" target="_blank" rel="noopener">
+            <div class="servicio-top">
+              <div class="servicio-icon">
+                <svg viewBox="0 0 24 24">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                  <line x1="1" y1="10" x2="23" y2="10" />
+                </svg>
+              </div>
+              <h3>Pagos en Línea</h3>
+            </div>
+            <p>Paga tus arbitrios, multas y tasas con tarjeta o banca móvil.</p>
+            <div class="servicio-link">
+              Ingresar
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+            </div>
+          </a>
+
+
+
+          <!-- ===== Portal de Transparencia ===== -->
+          <a class="servicio" href="https://www.transparencia.gob.pe/enlaces/pte_transparencia_enlaces.aspx?id_entidad=10087#.YfR0JurMK70" target="_blank" rel="noopener">
+            <div class="servicio-top">
+              <div class="servicio-icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <h3>Portal de Transparencia</h3>
+            </div>
+            <p>Accede a la información pública de la gestión municipal.</p>
+            <div class="servicio-link">
+              Ingresar
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+            </div>
+          </a>
+
+
+        </div>
+      </div>
+
+      <!-- ===== AVISO ===== -->
+      <div class="aviso">
+        <span class="aviso-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        </span>
+        <div>
+          <strong>Atención presencial:</strong> Lunes a Viernes de 08:00 a.m. a 05:00 p.m.
+          — Mesa de Partes: 08:00 a.m. a 04:30 p.m.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-grid">
+
+        <!-- Columna 1: Identidad -->
+        <div>
+          <img src="assets/logo-default.png" alt="Municipalidad de San Luis" />
+          <div class="footer-name">Municipalidad Distrital de San Luis</div>
+          <div class="footer-sub">Comprometidos con tu desarrollo</div>
+        </div>
+
+        <!-- Columna 2: Contacto -->
+        <div>
+          <div class="footer-title">Contacto</div>
+          <div class="footer-line">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+            Av. Del Parque s/n, San Luis
+          </div>
+          <div class="footer-line">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+            (01) 000-0000
+          </div>
+          <div class="footer-line">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+            informes@munisanluis.gob.pe
+          </div>
+        </div>
+
+        <!-- Columna 3: Horario -->
+        <div>
+          <div class="footer-title">Horario de Atención</div>
+          <div class="footer-line">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+            Lunes a Viernes
+          </div>
+          <div class="footer-line">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+            08:00 a.m. — 05:00 p.m.
+          </div>
+          <div class="footer-line">
+            <svg viewBox="0 0 24 24"><path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 21v-4h6v4" /></svg>
+            Mesa de Partes: 08:00 — 04:30
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-copy">
+        © <span id="anio"></span> Municipalidad Distrital de San Luis. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCRIPT
+       ============================================================ -->
+  <script>
+    document.getElementById('anio').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
